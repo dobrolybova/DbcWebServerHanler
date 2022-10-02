@@ -1,0 +1,5 @@
+dbc*
+deps/*
+ebin/*
+.rebar/*
+*.log

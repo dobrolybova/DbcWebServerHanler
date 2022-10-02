@@ -1,0 +1,10 @@
+{application, webserver,
+ [
+  {description, "Web server"},
+  {vsn, "1.0.0"},
+  {modules, ['root_handler','dbc_handler','webserver_app','webserver_sup']},
+  {registered, [webserver_sup]},
+  {applications, [kernel,stdlib,cowboy]},
+  {mod, { webserver_app, []}},
+  {env, []}
+ ]}.
