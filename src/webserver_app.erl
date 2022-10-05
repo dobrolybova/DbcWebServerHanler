@@ -10,6 +10,7 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
+    ok = dbc_handler:make_dbc_root_folder(),
 	Dispatch = cowboy_router:compile([
 		{'_', [
             {"/api/dbc", dbc_handler, []},

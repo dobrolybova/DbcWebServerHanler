@@ -1,0 +1,6 @@
+-define(DBC_FOLDER,     "dbc").
+-define(INDEX_FOLDER,   "dbc/index").
+-define(FILE_EXTENTION, "dbc").
+-define(METADATA_FILE,  "meta.json").
+-define(INDEX_FILE,     "index.json").
+-define(MSG_FILE,       "msg.json").
