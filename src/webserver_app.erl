@@ -11,6 +11,7 @@
 
 start(_StartType, _StartArgs) ->
     ok = dbc_handler:make_dbc_root_folder(),
+	ok = dbc_handler:initiate(),
 	Dispatch = cowboy_router:compile([
 		{'_', [
             {"/api/dbc", dbc_handler, []},
