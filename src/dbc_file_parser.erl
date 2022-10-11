@@ -19,9 +19,7 @@ create_data_files(Directory) ->
     {ok, MetaIoDevice} = file:open(Directory ++ "/" ++ ?METADATA_FILE, [write]),
     ok = file:close(MetaIoDevice),
     {ok, IndexIoDevice} = file:open(Directory ++ "/" ++ ?INDEX_FILE, [write]),
-    ok = file:close(IndexIoDevice),
-    {ok, MsgIoDevice} = file:open(Directory ++ "/" ++ ?MSG_FILE, [write]),
-    ok = file:close(MsgIoDevice).
+    ok = file:close(IndexIoDevice).
 
 create_filename_folder(FileName) ->
     File = remove_file_ext(FileName),
@@ -38,28 +36,10 @@ create_foldef_structure(FileName) ->
     ok = create_data_files(Directory),
     Directory.
 
-prepare_metadata(Directory, FileName) ->
-    {ok, 
-        {file_info, Size, _, _, 
-            {{_,_,_},{_,_,_}},
-            {{_,_,_},{_,_,_}},
-            {{_,_,_},{_,_,_}}
-            ,_,_,_,_,_,_,_
-        }
-    } = file:read_file_info(?DBC_FOLDER ++ "/" ++ binary_to_list(FileName)),
-    {{Year, Month, Day}, {Hour, Minute, Second}} = calendar:now_to_datetime(os:timestamp()),
-    StrTime = lists:flatten(io_lib:format("~4..0w-~2..0w-~2..0wT~2..0w:~2..0w:~2..0w",[Year,Month,Day,Hour,Minute,Second])),
-    Data = #{fileName => FileName, fileSize => Size, uploadTimestamp => list_to_binary(StrTime)},
-    FileData = jsone:encode(Data),
-    ok = file:write_file(Directory ++ "/" ++ ?METADATA_FILE, [FileData]).
-
-
-prepare_index(_Directory, _FileName) ->
-    ok.
-
 parse(FileName) ->
     Directory = create_foldef_structure(FileName),
-    prepare_metadata(Directory, FileName),
-    prepare_index(Directory, FileName).
+    ok = metadata_parser:prepare_metadata(Directory, FileName),
+    ok = index_parser:prepare_index(Directory, FileName),
+    ok = messages_parser:prepare_msg(Directory, FileName).
 
 

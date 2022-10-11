@@ -31,18 +31,36 @@ update_hash_wtite_file(FileName, Hash, Data) ->
     ok = file:write_file(?DBC_FOLDER ++ "/" ++ FileName, [Data]),
     ok.
 
+is_index_exist(File) ->
+    [F, _] = string:split(File, "."),
+    {Res, Data} = file:list_dir(?DBC_FOLDER ++ "/index/" ++ F),
+    case {Res, Data} of
+        {ok,[]} -> false;
+        {ok, _} -> true;
+        {_, _ } -> false
+    end.
+
+get_current_hash(File) ->
+    try CurrHash = persistent_term:get(File),
+        CurrHash
+    catch error:Error -> Error        
+    end.
+
+get_hash_if_handling_needed(FileName, Data) ->
+    Hash = erlang:md5(Data),
+    CurrHash = get_current_hash(FileName),
+    IsIxExist = is_index_exist(FileName),
+    if Hash /= CurrHash orelse not IsIxExist ->
+        Hash;
+    true -> ok            
+    end.
 
 prepare_file(File, Data) ->
     FileName = erlang:binary_to_list(File),
-    Hash = erlang:md5(Data),
-    try ExistHash = persistent_term:get(FileName),
-        if Hash == ExistHash ->
-            exist;
-        true ->
-            update_hash_wtite_file(FileName, Hash, Data)
-        end
-    catch error:_Error -> 
-        update_hash_wtite_file(FileName, Hash, Data)
+    Hash = get_hash_if_handling_needed(FileName, Data),
+    case Hash of
+        ok -> exist;
+        _ -> update_hash_wtite_file(FileName, Hash, Data)
     end.
 
 handle_file(Filename, Data) ->
@@ -79,7 +97,7 @@ parse_post_request(Req0) ->
 
 prepare_post_response_data(Result, Reason) ->
     case Result of
-        true -> {200, "The file is in process!\n"};
+        true -> {202, "The file is in process!\n"};
         false -> {400, Reason}
     end.
 
