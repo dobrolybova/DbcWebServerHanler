@@ -4,3 +4,6 @@
 -define(METADATA_FILE,  "meta.json").
 -define(INDEX_FILE,     "index.json").
 -define(MSG_FILE,       "msg.json").
+-define(IN_PROGRESS,    "In progress").
+-define(DONE,           "Done").
+-define(UNKNOWN,           "Unknown").

@@ -40,6 +40,7 @@ parse(FileName) ->
     Directory = create_foldef_structure(FileName),
     ok = metadata_parser:prepare_metadata(Directory, FileName),
     ok = index_parser:prepare_index(Directory, FileName),
-    ok = messages_parser:prepare_msg(Directory, FileName).
+    ok = messages_parser:prepare_msg(Directory, FileName),
+    ok = metadata_parser:update_status(?DONE, Directory, FileName).
 
 

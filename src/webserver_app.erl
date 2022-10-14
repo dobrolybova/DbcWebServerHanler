@@ -15,6 +15,7 @@ start(_StartType, _StartArgs) ->
 	Dispatch = cowboy_router:compile([
 		{'_', [
             {"/api/dbc", dbc_handler, []},
+			{"/hash", hash_handler, []},
 			{"/", root_handler, []}
 		]}
 	]),

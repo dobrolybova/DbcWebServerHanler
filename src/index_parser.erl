@@ -10,7 +10,7 @@ prepare_index(Directory, BinFileName) ->
     FileName = erlang:binary_to_list(BinFileName),
     {ok, BinaryData} = file:read_file(?DBC_FOLDER ++ "/" ++ FileName),
     Strings =  [binary_to_list(Data) || Data <- binary:split(BinaryData,<<"\n">>,[global])],
-    MessageIds = [Id || String <- Strings, (Id = get_message_id(String)) /= ok],
+    MessageIds = [erlang:integer_to_list(Id, 16)  || String <- Strings, (Id = get_message_id(String)) /= ok],
     Data = #{msgIds => MessageIds},
     json_wrapper:write(Data, Directory, ?INDEX_FILE).
 

@@ -10,5 +10,5 @@ prepare_msg(Directory, FileName) ->
     ok.
 
 create_msg_file(Directory, Id) ->
-    {ok, IoDevice} = file:open(Directory ++ "/msg_" ++ erlang:integer_to_list(Id), [write]),
+    {ok, IoDevice} = file:open(Directory ++ "/msg_" ++ Id, [write]),
     ok = file:close(IoDevice).

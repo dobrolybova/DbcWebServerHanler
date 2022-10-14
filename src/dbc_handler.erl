@@ -27,6 +27,9 @@ handle_file_on_init(File) ->
     handle_file(erlang:list_to_binary(File), Data).
 
 update_hash_wtite_file(FileName, Hash, Data) ->
+    % io:format("Start Sleep ~n"),
+    % timer:sleep(20000),
+    % io:format("Stop Sleep~n"),
     persistent_term:put(FileName, Hash),
     ok = file:write_file(?DBC_FOLDER ++ "/" ++ FileName, [Data]),
     ok.
@@ -40,27 +43,27 @@ is_index_exist(File) ->
         {_, _ } -> false
     end.
 
-get_current_hash(File) ->
-    try CurrHash = persistent_term:get(File),
-        CurrHash
-    catch error:Error -> Error        
-    end.
-
-get_hash_if_handling_needed(FileName, Data) ->
-    Hash = erlang:md5(Data),
-    CurrHash = get_current_hash(FileName),
-    IsIxExist = is_index_exist(FileName),
-    if Hash /= CurrHash orelse not IsIxExist ->
+get_hash_if_different(FileName, Data) ->
+    Hash = hash_handler:get_data_hash(Data),
+    CurrHash = hash_handler:get_file_hash(FileName),
+    if Hash /= CurrHash ->
         Hash;
     true -> ok            
     end.
 
 prepare_file(File, Data) ->
     FileName = erlang:binary_to_list(File),
-    Hash = get_hash_if_handling_needed(FileName, Data),
-    case Hash of
-        ok -> exist;
-        _ -> update_hash_wtite_file(FileName, Hash, Data)
+    Hash = get_hash_if_different(FileName, Data),
+    IsIxExist = is_index_exist(FileName),
+    case IsIxExist of
+        true ->
+            MetaStatus = metadata_parser:get_status(File);
+        false -> 
+            MetaStatus = ?UNKNOWN
+    end,
+    case {Hash, MetaStatus} of
+        {ok,?DONE} -> exist;        
+        {_ ,_}-> update_hash_wtite_file(FileName, Hash, Data)
     end.
 
 handle_file(Filename, Data) ->
@@ -78,15 +81,19 @@ start_handle_process(Filename, Data) ->
 
 file_handling_status(Filename) ->
     try Pid = persistent_term:get(Filename),
-        process_handling_status(Pid)
+        process_handling_status(Pid, Filename)
     catch error: _Error ->
         {400, "The file was not loaded\n"}
     end.
 
-process_handling_status(Pid) ->
+process_handling_status(Pid, Filename) ->
     case erlang:is_process_alive(Pid) of
         true -> {202, "Still in progress\n"};
-        false -> {200, "The file is handled\n"}
+        false -> 
+            case metadata_parser:get_status(Filename) of
+                ?DONE -> {200, "The file is handled\n"};
+                _     -> {500, "Internal error\n"}
+            end
     end.
 
 parse_post_request(Req0) ->
