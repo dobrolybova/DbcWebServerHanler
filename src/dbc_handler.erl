@@ -7,6 +7,11 @@
 
 -export([handle_file/2, handle_file_on_init/1, make_dbc_root_folder/0, initiate/0]).
 
+-spec make_dbc_root_folder() -> 'ok' | {error, atom()}.
+-spec handle_file_on_init(File::string()) -> 'ok'.
+-spec handle_file(Filename::binary(), Data::binary()) -> 'ok'.
+-spec initiate() -> 'ok'.
+
 make_dbc_root_folder() ->
     case file:make_dir(?DBC_FOLDER) of
         ok -> ok;

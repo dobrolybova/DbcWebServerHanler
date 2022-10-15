@@ -4,6 +4,8 @@
 
 -include("dbc.hrl").
 
+-spec parse(FileName::binary()) -> 'ok'.
+
 create_index_folder() ->
     case file:make_dir(?INDEX_FOLDER) of
         ok -> ok;

@@ -4,6 +4,9 @@
 
 -include("dbc.hrl").
 
+-spec get_data_hash(Data::binary()) -> binary().
+-spec get_file_hash(File::string()) -> binary() | atom().
+
 get_data_hash(Data) ->
     erlang:md5(Data).
 

@@ -6,6 +6,8 @@
 
 -define(MESSAGE_ID_PREFIX,  "BO_").
 
+-spec prepare_index(Directory::string(), BinFileName::binary()) -> 'ok' | {'error', atom()}.
+
 prepare_index(Directory, BinFileName) ->
     FileName = erlang:binary_to_list(BinFileName),
     {ok, BinaryData} = file:read_file(?DBC_FOLDER ++ "/" ++ FileName),

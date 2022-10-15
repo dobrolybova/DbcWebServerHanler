@@ -2,6 +2,8 @@
 
 -export([is_data_ok/2]).
 
+-spec is_data_ok(FileName::binary(), Body::binary()) -> {true | false, string()}.
+
 is_data_ok(FileName, Body) ->
     {FileRes, FileReason} = is_file_name_ok(FileName),
     {BodyRes, BodyReason} = is_body_ok(Body),
