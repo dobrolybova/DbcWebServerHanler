@@ -20,4 +20,4 @@ plt:
 dialyze: compile
 	@( $(REBAR) dialyze )
 
-.PHONY: all deps compile clean run dialyze
+.PHONY: all deps compile clean run plt dialyze

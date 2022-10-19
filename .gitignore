@@ -2,4 +2,5 @@ dbc/*
 deps/*
 ebin/*
 .rebar/*
+ut/_build/*
 *.log

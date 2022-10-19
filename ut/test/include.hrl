@@ -1,0 +1,3 @@
+-define(TEST_DIRECTORY, "TestDir").
+-define(TEST_FILE,      "TestFile").
+-define(TEST_IDS,       [1,2,3]).
