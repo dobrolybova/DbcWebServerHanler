@@ -17,13 +17,13 @@
 -include_lib("eunit/include/eunit.hrl").
 
 all() ->
-  [
-    prepare_msg_ok_test,
-    prepare_msg_wrong_file_not_binary_test,
-    prepare_msg_wrong_file_int_test,
-    prepare_msg_wrong_dir_bin_test,
-    prepare_msg_wrong_dir_int_test
-  ].
+    [
+        prepare_msg_ok_test,
+        prepare_msg_wrong_file_not_binary_test,
+        prepare_msg_wrong_file_int_test,
+        prepare_msg_wrong_dir_bin_test,
+        prepare_msg_wrong_dir_int_test
+    ].
 
 init_per_suite(Config) ->
     Config.
