@@ -1,16 +1,11 @@
 -module(webserver).
 
-%% API
 -export([
 	start/0,
 	stop/0
 ]).
 
 -define(APPS, [crypto, asn1, public_key, ssl, ranch, cowlib, cowboy, webserver]).
-
-%% ===================================================================
-%% API functions
-%% ===================================================================
 
 start() ->
 	ok = ensure_started(?APPS),
@@ -19,10 +14,6 @@ start() ->
 stop() ->
 	ok = sync:stop(),
 	ok = stop_apps(lists:reverse(?APPS)).
-
-%% ===================================================================
-%% Internal functions
-%% ===================================================================
 
 ensure_started([]) -> ok;
 ensure_started([App | Apps]) ->

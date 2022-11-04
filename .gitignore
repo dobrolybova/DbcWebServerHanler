@@ -4,3 +4,4 @@ ebin/*
 .rebar/*
 ut/_build/*
 *.log
+_build/*

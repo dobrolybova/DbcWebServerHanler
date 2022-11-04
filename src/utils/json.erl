@@ -1,11 +1,14 @@
--module(json_wrapper).
+-module(json).
 
--export([write/3, read_meta/1, get_messages_ids/1]).
+-export([
+    write/3,
+    read_meta/1,
+    get_messages_ids/1
+]).
 
--include("dbc.hrl").
+-include("../../include/dbc.hrl").
 
 -spec write(Data::map(), Directory::string(), File::string()) -> 'ok' | {'error', atom()}.
--spec read_ix(FileName::string()) -> map().
 -spec read_meta(FileName::string()) -> map().
 -spec get_messages_ids(FileName::string()) -> list().
 
@@ -23,6 +26,5 @@ read_meta(FileName) ->
     jsone:decode(Data).  
 
 get_messages_ids(File) ->
-    [FileName, _Extention] = string:split(File, "."),
-    MapData = read_ix(FileName),
+    MapData = read_ix(File),
     maps:get(<<"msgIds">>, MapData).

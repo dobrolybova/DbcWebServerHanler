@@ -6,4 +6,4 @@
 -define(MSG_FILE,       "msg.json").
 -define(IN_PROGRESS,    "In progress").
 -define(DONE,           "Done").
--define(UNKNOWN,           "Unknown").
+-define(UNKNOWN,        "Unknown").

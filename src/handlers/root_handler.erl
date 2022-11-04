@@ -5,7 +5,6 @@
 	init/2
 ]).
 
-
 init(Req0=#{path := <<"/">>}, State) ->
     Req = cowboy_req:reply(200,
         #{<<"content-type">> => <<"text/plain">>},

@@ -1,6 +1,8 @@
--module(dbc_request_verification).
+-module(validation).
 
--export([is_data_ok/2]).
+-export([
+    is_data_ok/2
+]).
 
 -spec is_data_ok(FileName::binary(), Body::binary()) -> {true | false, string()}.
 

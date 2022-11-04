@@ -1,12 +1,18 @@
--module(metadata_parser).
+-module(metadata).
 
--include("dbc.hrl").
+-include("../../include/dbc.hrl").
 
--export([prepare_metadata/2, update_status/3, get_status/1]).
+-export([
+    prepare_metadata/2,
+    update_status/3,
+    get_status/1,
+    create_file/1
+]).
 
 -spec prepare_metadata(Directory::string(), FileName::binary()) -> 'ok' | {'error', atom()}.
 -spec update_status(Status::string(), Directory::string(), FileName::binary()) -> 'ok' | {'error', atom()}.
 -spec get_status(FileName::binary()) -> string().
+-spec create_file(Directory::string()) -> 'ok'.
 
 prepare_metadata(Directory, FileName) ->
     {ok, 
@@ -20,16 +26,20 @@ prepare_metadata(Directory, FileName) ->
     {{Year, Month, Day}, {Hour, Minute, Second}} = calendar:now_to_datetime(os:timestamp()),
     StrTime = lists:flatten(io_lib:format("~4..0w-~2..0w-~2..0wT~2..0w:~2..0w:~2..0w",[Year,Month,Day,Hour,Minute,Second])),
     Data = #{fileName => FileName, fileSize => Size, uploadTimestamp => list_to_binary(StrTime), status => list_to_binary(?IN_PROGRESS)},
-    json_wrapper:write(Data, Directory, ?METADATA_FILE).
+    json:write(Data, Directory, ?METADATA_FILE).
 
 update_status(Status, Directory, FileName) ->
-    [File, _Extention] = string:split(erlang:binary_to_list(FileName), "."),
-    MapData = maps:update(<<"status">>, list_to_binary(Status), json_wrapper:read_meta(File)),
-    json_wrapper:write(MapData, Directory, ?METADATA_FILE).
+    File = erlang:binary_to_list(FileName),
+    MapData = maps:update(<<"status">>, list_to_binary(Status), json:read_meta(File)),
+    json:write(MapData, Directory, ?METADATA_FILE).
 
 get_status(FileName) ->
-    [File, _Extention] = string:split(erlang:binary_to_list(FileName), "."),
-    MapData = json_wrapper:read_meta(File),
+    File = erlang:binary_to_list(FileName),
+    MapData = json:read_meta(File),
     Status = maps:get(<<"status">>, MapData),
+    logger:notice("get_status ~p", [Status]),
     erlang:binary_to_list(Status).
-     
+
+create_file(Directory) ->
+    File = erlang:list_to_binary(Directory ++ "/" ++ ?METADATA_FILE), 
+    files:create(File).   

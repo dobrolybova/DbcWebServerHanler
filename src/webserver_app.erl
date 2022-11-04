@@ -2,16 +2,17 @@
 
 -behaviour(application).
 
-%% Application callbacks
--export([start/2, stop/1]).
+-include("../include/dbc.hrl").
 
-%% ===================================================================
-%% Application callbacks
-%% ===================================================================
+-export([
+	start/2,
+	stop/1
+]).
 
 start(_StartType, _StartArgs) ->
-    ok = dbc_handler:make_dbc_root_folder(),
-	ok = dbc_handler:initiate(),
+	ok = start_logger(),
+    ok = files:make_folder(erlang:list_to_binary(?DBC_FOLDER)),
+	ok = initiate(),
 	Dispatch = cowboy_router:compile([
 		{'_', [
             {"/api/dbc", dbc_handler, []},
@@ -27,3 +28,20 @@ start(_StartType, _StartArgs) ->
 
 stop(_State) ->
     ok.
+
+start_logger() ->
+    ok = logger:set_primary_config(level, notice),
+    Config = #{config => #{file => "./info.log"}, level => info},
+    ok = logger:add_handler(parser,logger_std_h,Config),
+    ok = logger:add_handler(validation,logger_std_h,Config),
+    ok = logger:add_handler(hash,logger_std_h,Config),
+    ok = logger:add_handler(index,logger_std_h,Config),
+    ok = logger:add_handler(message,logger_std_h,Config),
+    ok = logger:add_handler(metadata,logger_std_h,Config),
+    ok = logger:add_handler(root_handler,logger_std_h,Config),
+    ok = logger:add_handler(json,logger_std_h,Config).
+
+initiate() ->
+	{ok, FilesList} = file:list_dir(?DBC_FOLDER),
+	[parser:start_parser_process(erlang:list_to_binary(File), <<>>) || File <- lists:delete("index", FilesList)],
+	ok.
