@@ -15,6 +15,7 @@
 -spec create_file(Directory::string()) -> 'ok'.
 
 prepare_metadata(Directory, FileName) ->
+    logger:debug("prepare_metadata Directory ~p FileName ~p", [Directory, FileName]),
     {ok, 
         {file_info, Size, _, _, 
             {{_,_,_},{_,_,_}},
@@ -29,6 +30,7 @@ prepare_metadata(Directory, FileName) ->
     json:write(Data, Directory, ?METADATA_FILE).
 
 update_status(Status, Directory, FileName) ->
+    logger:debug("update_status ~p Directory ~p FileName ~p", [Status, Directory, FileName]),
     File = erlang:binary_to_list(FileName),
     MapData = maps:update(<<"status">>, list_to_binary(Status), json:read_meta(File)),
     json:write(MapData, Directory, ?METADATA_FILE).
@@ -37,9 +39,10 @@ get_status(FileName) ->
     File = erlang:binary_to_list(FileName),
     MapData = json:read_meta(File),
     Status = maps:get(<<"status">>, MapData),
-    logger:notice("get_status ~p", [Status]),
+    logger:debug("get_status FileName ~p Status ~p", [FileName, Status]),
     erlang:binary_to_list(Status).
 
 create_file(Directory) ->
+    logger:debug("create_file Directory ~p", [Directory]),
     File = erlang:list_to_binary(Directory ++ "/" ++ ?METADATA_FILE), 
     files:create(File).   

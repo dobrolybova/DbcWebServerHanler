@@ -5,8 +5,8 @@
 ]).
 
 init(Req0=#{path := <<"/hash">>, method := <<"DELETE">>}, State) ->
+    logger:info("Handle delete hash"),
     FileName = rest:get_filename(Req0),
-    % {Res, Body} = rest:prepare_hash_delete_response(FileName),
     {Result, Body} =  case FileName of
                         false -> 
                             hash:clear_all(),
@@ -21,6 +21,7 @@ init(Req0=#{path := <<"/hash">>, method := <<"DELETE">>}, State) ->
         Req0),
     {ok, Req, State};
 init(Req0=#{path := <<"/hash">>}, State) ->
+    logger:info("Wrong handle hash"),
     Req = cowboy_req:reply(400,
         #{<<"content-type">> => <<"text/plain">>},
         erlang:list_to_binary("Wrong method, please use DELETE"),

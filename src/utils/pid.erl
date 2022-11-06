@@ -5,13 +5,15 @@
     get/1
 ]).
 
--spec update(Filename::binary(), Pid::pid()) ->  ok.
--spec get(Filename::binary()) -> any().
+-spec update(FileName::binary(), Pid::pid()) ->  ok.
+-spec get(FileName::binary()) -> any().
 
-update(Filename, Pid) ->
-    FileKey = hash:make_hash(Filename),
+update(FileName, Pid) ->
+    logger:debug("update pid FileName ~p pid ~p", [FileName, Pid]),
+    FileKey = hash:make_hash(FileName),
     persistent_term:put(FileKey, Pid).
 
-get(Filename) ->
-    FileKey = hash:make_hash(Filename),
+get(FileName) ->
+    logger:debug("FileName pid for FileName ~p", [FileName]),
+    FileKey = hash:make_hash(FileName),
     persistent_term:get(FileKey).

@@ -1,6 +1,7 @@
 -module(rest).
 
 -include("../../include/dbc.hrl").
+-include("../../include/http_status.hrl").
 
 -export([
     get_filename/1,
@@ -32,37 +33,37 @@ get_body(Req) ->
 dbc_post_response(Filename, Data) ->
     {Result, Reason} = validation:is_data_ok(Filename, Data),
     case Result of
-        true -> {202, "The file is in process!\n"};
-        false -> {400, Reason}
+        true -> {?ACCEPTED, "The file is in process!\n"};
+        false -> {?BAD_REQUEST, Reason}
     end.
 
 dbc_get_response(Filename) ->
-    logger:notice("Try to get Pid for file ~p", [Filename]),
+    logger:debug("Try to get Pid for file ~p", [Filename]),
     try Pid = pid:get(Filename),
         get_process_result(Pid, Filename)
     catch error: _Error ->
-        {400, "The file was not loaded\n"}
+        {?BAD_REQUEST, "The file was not loaded\n"}
     end.
 
 get_process_result(Pid, Filename) ->
     case erlang:is_process_alive(Pid) of
-        true ->  {202, "Still in progress\n"};
+        true ->  {?ACCEPTED, "Still in progress\n"};
         false -> get_meta_result(Filename)
     end.
 
 get_meta_result(Filename) ->
     case metadata:get_status(Filename) of
-        ?DONE -> {200, "The file is handled\n"};
-        _     -> {500, "Internal error\n"}
+        ?DONE -> {?OK, "The file is handled\n"};
+        _     -> {?INTERNAL_SERVER_ERROR, "Internal error\n"}
     end.
 
 clear_all() ->
-    {200, "Hash is cleared"}.
+    {?OK, "Hash is cleared"}.
 
 clear(Filename, Res) ->
     File = erlang:binary_to_list(Filename),
     case Res of
-        true  -> {200, "Hash for file" ++ File ++ " is cleared"};
-        false -> {400, "Hash for such file is not exist"}
+        true  -> {?OK, "Hash for file" ++ File ++ " is cleared"};
+        false -> {?BAD_REQUEST, "Hash for such file is not exist"}
     end.
     

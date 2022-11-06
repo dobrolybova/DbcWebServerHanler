@@ -1,0 +1,4 @@
+-define(OK,                    200).
+-define(ACCEPTED,              202).
+-define(BAD_REQUEST,           400).
+-define(INTERNAL_SERVER_ERROR, 500).

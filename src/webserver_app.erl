@@ -30,16 +30,8 @@ stop(_State) ->
     ok.
 
 start_logger() ->
-    ok = logger:set_primary_config(level, notice),
-    Config = #{config => #{file => "./info.log"}, level => info},
-    ok = logger:add_handler(parser,logger_std_h,Config),
-    ok = logger:add_handler(validation,logger_std_h,Config),
-    ok = logger:add_handler(hash,logger_std_h,Config),
-    ok = logger:add_handler(index,logger_std_h,Config),
-    ok = logger:add_handler(message,logger_std_h,Config),
-    ok = logger:add_handler(metadata,logger_std_h,Config),
-    ok = logger:add_handler(root_handler,logger_std_h,Config),
-    ok = logger:add_handler(json,logger_std_h,Config).
+    ok = log:set_level(notice),
+    log:add_handlers().
 
 initiate() ->
 	{ok, FilesList} = file:list_dir(?DBC_FOLDER),

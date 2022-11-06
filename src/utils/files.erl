@@ -17,6 +17,7 @@
 -spec create(File::binary()) -> ok.
 
 make_folder(File) ->
+    logger:debug("make_folder File ~p", [File]),
     FileName = erlang:binary_to_list(File),
     case file:make_dir(FileName) of
         ok -> ok;
@@ -25,6 +26,7 @@ make_folder(File) ->
     end.
 
 make_index_folder() ->
+    logger:debug("make_index_folder"),
     case file:make_dir(?INDEX_FOLDER) of
         ok -> ok;
         {error, eexist} -> ok;
@@ -32,6 +34,7 @@ make_index_folder() ->
     end. 
 
 read(File) ->
+    logger:debug("read File ~p", [File]),
     case file:read_file(?DBC_FOLDER ++
                    "/" ++
                    erlang:binary_to_list(File)) of
@@ -40,11 +43,13 @@ read(File) ->
     end.
 
 write(File, Data) ->
+    logger:debug("write File ~p Data ~p", [File, Data]),
     ok = file:write_file(?DBC_FOLDER ++
                          "/" ++
                          erlang:binary_to_list(File), [Data]).
 
 create(File) ->
+    logger:debug("create File ~p", [File]),
     FileName = erlang:binary_to_list(File),
     {ok, IoDevice} = file:open(FileName, [write]),
     ok = file:close(IoDevice).

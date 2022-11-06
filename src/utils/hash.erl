@@ -19,27 +19,31 @@
 -spec get_file_hash(FileName::binary()) -> binary().
 
 make_hash(Data) ->
+    logger:debug("make_hash Data ~p", [Data]),
     erlang:md5(Data).
 
 get_file_hash(File) ->
+    logger:debug("get_file_hash File ~p", [File]),
     try CurrHash = persistent_term:get(File),
         CurrHash
     catch error:Error -> Error        
     end.
 
 clear_all() ->
+    logger:debug("clear_all File"),
     {ok, FilesList} = file:list_dir(?DBC_FOLDER),
     [persistent_term:erase(FileName) || FileName <- lists:delete("index", FilesList)],
     ok.
 
 clear(FileName) ->
-    logger:notice("erase for file ~p", [FileName]),
+    logger:debug("erase for file ~p", [FileName]),
     Res = persistent_term:erase(FileName),
     Res.
 
 compare(FileHash, DataHash) ->
+    logger:debug("compare FileHash ~p DataHash ~p", [FileHash, DataHash]),
     FileHash =:= DataHash.
 
 update(FileName, Hash) ->
-    logger:notice("put for file ~p", [FileName]),
+    logger:debug("put for file ~p, hash ~p", [FileName, Hash]),
     persistent_term:put(FileName, Hash).
