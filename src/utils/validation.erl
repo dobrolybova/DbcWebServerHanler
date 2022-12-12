@@ -21,7 +21,7 @@ is_data_ok(FileName, Body) ->
 
 is_body_ok(Body) ->
     if Body == <<>> ->
-        {false, "Body is empty"};
+        {false, "Body is empty\n"};
     true -> {true, ""}
     end.
 
@@ -34,5 +34,5 @@ is_file_name_ok(FileName) ->
     try [_H, _T] = string:split(File, "."),
         {true, ""}
     catch error: _Error ->
-        {false, "Wrong file name format, it should be .dbc file"}
+        {false, "Wrong file name format, it should be .dbc file\n"}
     end.

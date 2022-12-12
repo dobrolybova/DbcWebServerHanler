@@ -39,8 +39,8 @@ is_parsing_needed(File, FileHash, DataHash) ->
                     end,
     logger:debug("is_parsing_needed Res ~p MetaStatus ~p", [Res, MetaStatus]),
     case {Res, MetaStatus} of
-        {true,?DONE} -> false;        
-        {_ ,_}        -> true
+         {true,?DONE} -> false;        
+         {_ ,_}       -> true
     end.
 
 parser(Filename, Data) ->

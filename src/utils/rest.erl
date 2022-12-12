@@ -42,7 +42,7 @@ dbc_get_response(Filename) ->
     try Pid = pid:get(Filename),
         get_process_result(Pid, Filename)
     catch error: _Error ->
-        {?BAD_REQUEST, "The file was not loaded\n"}
+        {?NOT_FOUND, "The file was not loaded\n"}
     end.
 
 get_process_result(Pid, Filename) ->
@@ -64,6 +64,6 @@ clear(Filename, Res) ->
     File = erlang:binary_to_list(Filename),
     case Res of
         true  -> {?OK, "Hash for file" ++ File ++ " is cleared"};
-        false -> {?BAD_REQUEST, "Hash for such file is not exist"}
+        false -> {?NOT_FOUND, "Hash for such file is not exist"}
     end.
     
