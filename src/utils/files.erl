@@ -14,7 +14,7 @@
 -spec make_index_folder() -> 'ok' | {error, atom()}.
 -spec read(File::binary()) -> binary().
 -spec write(File::binary(), Data::binary()) -> 'ok' | {error, _Reason}.
--spec create(File::binary()) -> ok.
+-spec create(File::binary()) -> string().
 
 make_folder(File) ->
     logger:debug("make_folder File ~p", [File]),
@@ -52,4 +52,5 @@ create(File) ->
     logger:debug("create File ~p", [File]),
     FileName = erlang:binary_to_list(File),
     {ok, IoDevice} = file:open(FileName, [write]),
-    ok = file:close(IoDevice).
+    ok = file:close(IoDevice),
+    FileName.

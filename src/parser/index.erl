@@ -12,7 +12,7 @@
 
 -spec prepare_index(Directory::string(), BinFileName::binary()) -> 'ok' | {'error', atom()}.
 -spec is_exist(File::binary()) -> boolean().
--spec create_file(Directory::string()) -> 'ok'.
+-spec create_file(Directory::string()) -> string().
 
 prepare_index(Directory, BinFileName) ->
     logger:debug("prepare_index for directory ~p File ~p", [Directory, BinFileName]),

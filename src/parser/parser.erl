@@ -11,8 +11,9 @@
 
 create_data_files(Directory) ->
     logger:debug("create_data_files Directory ~p", [Directory]),
-    metadata:create_file(Directory),
-    index:create_file(Directory).
+    _ = metadata:create_file(Directory),
+    _ = index:create_file(Directory),
+    ok.
 
 create_foldef_structure(FileName) ->
     logger:debug("create_foldef_structure FileName ~p", [FileName]),

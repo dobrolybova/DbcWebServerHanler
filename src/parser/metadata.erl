@@ -12,7 +12,7 @@
 -spec prepare_metadata(Directory::string(), FileName::binary()) -> 'ok' | {'error', atom()}.
 -spec update_status(Status::string(), Directory::string(), FileName::binary()) -> 'ok' | {'error', atom()}.
 -spec get_status(FileName::binary()) -> string().
--spec create_file(Directory::string()) -> 'ok'.
+-spec create_file(Directory::string()) -> string().
 
 prepare_metadata(Directory, FileName) ->
     logger:debug("prepare_metadata Directory ~p FileName ~p", [Directory, FileName]),
