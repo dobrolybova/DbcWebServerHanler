@@ -27,6 +27,7 @@ init_per_testcase(_, Config) ->
     meck:expect(file, open, fun ((?TEST_DIRECTORY ++_String), [write]) -> {ok, <<>>} end),
     meck:expect(file, close, fun(_IoDevice) -> ok end),
     meck:expect(json, get_messages_ids, fun(?TEST_FILE) -> ?TEST_IDS end),
+    meck:expect(json, write, fun(_Data, ?TEST_DIRECTORY, _File) -> 'ok' end),
     Config.
 
 end_per_testcase(_, Config) ->

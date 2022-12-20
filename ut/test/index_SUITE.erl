@@ -65,4 +65,4 @@ is_exist_false_error_test(_Config) ->
 
 create_file_ok_test(_Config) ->
     Res = index:create_file(?TEST_DIRECTORY),
-    ?assertEqual(ok, Res).
+    ?assertEqual("TestDir/index.json", Res).

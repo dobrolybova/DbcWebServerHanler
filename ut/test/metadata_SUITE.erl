@@ -71,4 +71,4 @@ get_status_ok_test(_Config) ->
 
 create_file_ok_test(_Config) ->
     Res = metadata:create_file(?TEST_DIRECTORY),
-    ?assertEqual(ok, Res).
+    ?assertEqual("TestDir/meta.json", Res).
