@@ -49,7 +49,7 @@ parser_not_needed_test(_Config) ->
     ok = parser:parser(erlang:list_to_binary(?TEST_FILE), Data).
 
 parser_is_needed_test(_Config) ->
-    meck:expect(file, read_file, fun(_Filename) -> {ok, <<"{\"status\": \"Unknown\", \"msgIds\": [\"1\",\"2\",\"3\"]}">>} end),
+    meck:expect(file, read_file, fun(_Filename) -> {ok, <<"{\"status\": \"Unknown\", \"msgIds\": [1, 2 , 3]}">>} end),
     Data = "BO_ 304 GAS_PEDAL_2: 8 PCM",
     ok = parser:parser(erlang:list_to_binary(?TEST_FILE), Data).
 

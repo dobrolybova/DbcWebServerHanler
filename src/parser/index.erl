@@ -8,18 +8,15 @@
     create_file/1
 ]).
 
--define(MESSAGE_ID_PREFIX,  "BO_").
-
 -spec prepare_index(Directory::string(), BinFileName::binary()) -> 'ok' | {'error', atom()}.
 -spec is_exist(File::binary()) -> boolean().
 -spec create_file(Directory::string()) -> string().
 
 prepare_index(Directory, BinFileName) ->
     logger:debug("prepare_index for directory ~p File ~p", [Directory, BinFileName]),
-    FileName = erlang:binary_to_list(BinFileName),
-    {ok, BinaryData} = file:read_file(?DBC_FOLDER ++ "/" ++ FileName),
+    BinaryData = files:read(BinFileName),
     Strings =  [binary_to_list(Data) || Data <- binary:split(BinaryData,<<"\n">>,[global])],
-    MessageIds = [erlang:integer_to_list(Id, 16)  || String <- Strings, (Id = get_message_id(String)) /= ok],
+    MessageIds = [Id  || String <- Strings, (Id = get_message_id(String)) /= ok],
     Data = #{msgIds => MessageIds},
     json:write(Data, Directory, ?INDEX_FILE).
 

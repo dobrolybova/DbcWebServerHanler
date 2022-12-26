@@ -7,3 +7,4 @@
 -define(IN_PROGRESS,    "In progress").
 -define(DONE,           "Done").
 -define(UNKNOWN,        "Unknown").
+-define(MESSAGE_ID_PREFIX,  "BO_").
