@@ -20,23 +20,9 @@ prepare_index(Directory, BinFileName) ->
     Data = #{msgIds => MessageIds},
     json:write(Data, Directory, ?INDEX_FILE).
 
-get_message_id(Str) ->
-    logger:debug("get_message_id for ~p", [Str]),
-    StrsList = string:split(Str, " ", all),
-    case lists:nth(1, StrsList) of
-        ?MESSAGE_ID_PREFIX ->
-            convert_str_id_to_int(lists:nth(2, StrsList));
-        _ -> 
-            ok
-    end.
-
-convert_str_id_to_int(StrId) ->
-    logger:debug("convert_str_id_to_int ~p", [StrId]),
-    try Id = erlang:list_to_integer(StrId),
-        Id
-    catch error:_Error -> 
-        ok
-    end.
+get_message_id(String) ->
+    StrsList = string:split(String, " ", all),
+    messages:get_message_id(StrsList).
 
 is_exist(File) ->
     FileName = erlang:binary_to_list(File),
