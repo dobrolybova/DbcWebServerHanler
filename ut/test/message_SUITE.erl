@@ -30,7 +30,7 @@ init_per_testcase(_, Config) ->
     meck:new(file, [unstick, passthrough]),
     meck:expect(file, open, fun(_Filename, [write]) -> {ok, <<>>} end),
     meck:expect(file, close, fun(_IoDevice) -> ok end),
-    meck:expect(file, read_file, fun(_FileName) -> {ok, <<"BO_ 1 POWERTRAIN_DATA: 8 PCM">>} end),
+    meck:expect(file, read_file, fun(_FileName) -> {ok, <<"BO_ 1 POWERTRAIN_DATA: 8 PCM\nBO_ 2 POWERTRAIN_DATA: 8 PCM\nBO_ 3 POWERTRAIN_DATA: 8 PCM\n">>} end),
     meck:expect(json, get_messages_ids, fun("dbc/index/" ++ ?TEST_FILE) -> ?TEST_IDS end),    
     meck:expect(json, write, fun(_Data, _Directory, _File) -> 'ok' end),
     Config.

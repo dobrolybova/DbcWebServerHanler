@@ -52,10 +52,7 @@ name_map(FileName, Id) ->
     BinaryData = files:read(erlang:list_to_binary(DbcFile)),
     Strings =  [binary_to_list(Data) || Data <- binary:split(BinaryData,<<"\n">>,[global])],
     MessageNames = [Name  || String <- Strings, (Name = get_message_name(String, Id)) /= ok],
-    MessageName = case MessageNames of
-                      [] -> "";
-                      _ -> erlang:list_to_binary(lists:nth(1, MessageNames))
-                  end,
+    MessageName = erlang:list_to_binary(lists:nth(1, MessageNames)),
     #{<<"msgName">> => MessageName}.
 
 size_map(_File) ->

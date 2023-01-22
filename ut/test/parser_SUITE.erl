@@ -26,12 +26,24 @@ init_per_suite(Config) ->
     Config.
 
 init_per_testcase(_, Config) ->
-    % meck:new(json),
+    meck:new(messages),
     meck:new(file, [unstick, passthrough]),
-    % meck:expect(json, write, fun(_Data, _Directory, _IndexFile) -> ok end),
+    meck:expect(messages, prepare_msg, fun(_Directory, _FileName) -> ok end),
+    meck:expect(messages, get_message_id, fun(_StrsList) -> ok end),
     meck:expect(file, read_file, fun(_Filename) -> {ok, <<"{\"status\": \"Done\"}">>} end),
+    meck:expect(file, write_file, fun(_Filename, _Data) -> ok end),
     meck:expect(file, open, fun(_Filename, [write]) -> {ok, <<>>} end),
     meck:expect(file, close, fun(_IoDevice) -> ok end),
+    meck:expect(file, make_dir, fun(_Filename) -> ok end),
+    meck:expect(file, read_file_info, fun ("dbc/" ++ ?TEST_FILE) -> 
+        {ok, 
+            {file_info, 256, "", "", 
+                {{"","",""},{"","",""}},
+                {{"","",""},{"","",""}},
+                {{"","",""},{"","",""}}
+                ,"","","","","","",""
+            }
+        } end),
     Config.
 
 end_per_testcase(_, Config) ->
