@@ -1,4 +1,9 @@
 <h1>Web Server to handle dbc files<h1>
+<h2>The server stores received .dbc files in "dbc" folder and saves parsed results to "index" folder.<h2>
+<h2>Index folder contains folders for every .dbc file with:<p>
+- meta.json file with metadata such as File name, file size, handling status and timestamp<p>
+- index.json with list of messages<p>
+- msg_... files for every message with particular message info <h2>
 
 <h2>Build instruction:<h2>
 <p>make clean<p>
